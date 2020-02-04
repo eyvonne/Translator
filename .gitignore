@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+data/.eng-fren 2.txt.icloud
+data/.eng-fren.txt.icloud
+data/eng-fren2.txt
+data/eng_fren_full.tsv
+data/processed.tsv
+data/processed_full.tsv
+data/sentences.tsv
