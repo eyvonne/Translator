@@ -134,3 +134,6 @@ data/eng_fren_full.tsv
 data/processed.tsv
 data/processed_full.tsv
 data/sentences.tsv
+
+# I don't want any of my data going to GitHub, 
+data/
