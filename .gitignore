@@ -135,5 +135,8 @@ data/processed.tsv
 data/processed_full.tsv
 data/sentences.tsv
 
-# I don't want any of my data going to GitHub, 
+# I don't want any of my data going to GitHub, its too big
 data/
+
+# blog posts don't need to be on github
+blogPosts/
