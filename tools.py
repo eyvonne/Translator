@@ -75,3 +75,19 @@ def encode_english(sentence, id2eng):
     return padded
 
 
+def str_to_int(data):
+    data = data.strip('[]').split(', ')
+    data = [int(x) for x in data]
+    return data
+
+def load_data():
+    '''this function loads up the already processed data with all of the nested lists properly reformatted as lists'''
+    df = pd.read_csv('data/processed_full.tsv', sep='\t')
+    df['english_tokens'] = df['english_tokens'].apply(lambda x: x.strip("['']").split("', '"))
+    df['french_tokens'] = df['french_tokens'].apply(lambda x: x.strip("['']").split("', '"))
+    df['english_bow'] = df['english_bow'].apply(str_to_int)
+    df['french_bow'] = df['french_bow'].apply(str_to_int)
+    df['english_padded'] = df['english_padded'].apply(str_to_int)
+    df['french_padded'] = df['french_padded'].apply(str_to_int)
+    df = df.drop('Unnamed: 0', axis=1)
+    return df
