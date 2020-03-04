@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from gensim.corpora.dictionary import Dictionary 
 from gensim.utils import tokenize
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -37,22 +38,23 @@ def nlp_to_nums(df):
     print('BOWs built')
     
     #pad the sequences 
-    processed_data['english_padded'] = pad_sequences(
-        processed_data['english_bow'],
-        maxlen=50,
-        dtype='int32',
-        padding='post',
-        value=-1
-    ).tolist()
-    
-    processed_data['french_padded'] = pad_sequences(
-        processed_data['french_bow'],
+    df['english_padded'] = pad_sequences(
+        df['english_bow'],
         maxlen=60,
         dtype='int32',
         padding='post',
         value=-1
     ).tolist()
     
+    df['french_padded'] = pad_sequences(
+        df['french_bow'],
+        maxlen=60,
+        dtype='int32',
+        padding='post',
+        value=-1
+    ).tolist()
+    
+
     return df, id2fren, id2eng
 
 
@@ -78,10 +80,10 @@ def encode_english(sentence, id2eng):
 def str_to_int(data):
     data = data.strip('[]').split(', ')
     data = [int(x) for x in data]
-    return data
+    return np.asarray(data)
 
 def load_data():
-    '''this function loads up the already processed data with all of the nested lists properly reformatted as lists'''
+    '''this function loads up the already processed data with all of the nested lists properly reformatted as lists, and loads up the dictionaries'''
     df = pd.read_csv('data/processed_full.tsv', sep='\t')
     df['english_tokens'] = df['english_tokens'].apply(lambda x: x.strip("['']").split("', '"))
     df['french_tokens'] = df['french_tokens'].apply(lambda x: x.strip("['']").split("', '"))
@@ -90,4 +92,16 @@ def load_data():
     df['english_padded'] = df['english_padded'].apply(str_to_int)
     df['french_padded'] = df['french_padded'].apply(str_to_int)
     df = df.drop('Unnamed: 0', axis=1)
-    return df
+    
+    eng = Dictionary.load('data/Dictionaries/eng')
+    fren = Dictionary.load('data/Dictionaries/fren')
+    
+     # create ML data
+    X_eng = np.vstack(df['english_padded'].values)
+    y_fren = np.vstack(df['french_padded'].values)
+    
+    y_fren = y_fren.reshape(*y_fren.shape, 1)
+    X_eng = X_eng.reshape(*X_eng.shape, 1)
+    
+    return df, eng, fren, X_eng, y_fren
+

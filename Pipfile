@@ -11,7 +11,8 @@ pandas = "*"
 tensorflow = "*"
 gensim = "*"
 cltk = "*"
-
+scikit-learn = "*"
+keras = "*"
 
 [requires]
 python_version = "3.7"
