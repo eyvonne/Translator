@@ -140,3 +140,5 @@ data/
 
 # blog posts don't need to be on github
 blogPosts/
+
+.DS_Store
